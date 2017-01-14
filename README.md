@@ -5,7 +5,7 @@ Generator of flight combinations.
 ### Completed
 
 ### Planned
-* get all flight combinations (direct only) between two cities on a given day using skyscanner API
+* get all flight combinations (direct only) between two cities on a given day (which API gives me that?)
 * extend to a range of days (e.g. earlierStart 1/4/2017, latestReturn 30/5/2017)
 * enforce a minimum stay in number of holidays (e.g. holidaysOffWork 3-5)
 * endpoints can be specified either as cities or airports
