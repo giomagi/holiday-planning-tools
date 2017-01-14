@@ -14,12 +14,34 @@ import java.io.IOException;
 
 public class GoogleQpxExperiment {
 
+    private static final String SAMPLE_REQ = "{ " +
+            "  \"request\": { " +
+            "    \"slice\": [ " +
+            "      { " +
+            "        \"origin\": \"LON\", " +
+            "        \"destination\": \"SVQ\", " +
+            "        \"date\": \"2017-05-22\", " +
+            "        \"maxStops\": 0 " +
+            "      } " +
+            "    ], " +
+            "    \"passengers\": { " +
+            "      \"adultCount\": 1, " +
+            "      \"infantInLapCount\": 0, " +
+            "      \"infantInSeatCount\": 0, " +
+            "      \"childCount\": 0, " +
+            "      \"seniorCount\": 0 " +
+            "    }, " +
+            "    \"solutions\": 100, " +
+            "    \"refundable\": false " +
+            "  } " +
+            "}";
+
     public static void main(String[] args) throws IOException {
 
         String qpxKey = IOUtils.toString(new FileInputStream(".private/qpx.key"));
 
         HttpPost req = new HttpPost("https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + qpxKey);
-        req.setEntity(new StringEntity(IOUtils.toString(new FileInputStream(".private/qpx_test.json"))));
+        req.setEntity(new StringEntity(SAMPLE_REQ));
         req.addHeader("Content-Type", "application/json");
 
         CloseableHttpResponse response = HttpClients.createDefault().execute(req);
