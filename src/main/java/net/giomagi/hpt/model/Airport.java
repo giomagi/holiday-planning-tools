@@ -1,5 +1,7 @@
 package net.giomagi.hpt.model;
 
+import net.giomagi.hpt.helpers.IataCodes;
+
 public class Airport extends ValueType {
     public final String airportName;
 
@@ -11,7 +13,4 @@ public class Airport extends ValueType {
         return new Airport(airportName);
     }
 
-    public String iata() {
-        return IataCodes.translator().airportCodeFor(airportName);
-    }
 }
