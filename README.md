@@ -4,9 +4,9 @@ Generator of flight combinations.
 
 ### Completed
 * get all flight combinations (direct only) between two airports on a given day from file based data
+* extend to a range of days (e.g. earlierStart 1/4/2017, latestReturn 30/5/2017)
 
 ### Planned
-* extend to a range of days (e.g. earlierStart 1/4/2017, latestReturn 30/5/2017)
 * enforce a minimum stay in number of holidays (e.g. holidaysOffWork 3-5)
 * endpoints can be specified either as cities or airports
 * get flights between two sets of endpoints (e.g. (Heathrow, Gatwick) to (Bilbao, San Sebastian, Bordeaux))

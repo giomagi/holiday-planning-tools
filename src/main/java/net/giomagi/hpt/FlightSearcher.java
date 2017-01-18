@@ -1,5 +1,6 @@
 package net.giomagi.hpt;
 
+import net.giomagi.hpt.model.DateRange;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.providers.FileBasedFlightProvider;
 
@@ -12,7 +13,8 @@ public class FlightSearcher {
 
         FileBasedFlightProvider provider = FileBasedFlightProvider.fromFile("data/flights.csv");
 
-        Set<Flight> flights = provider.flights("LGW", "SVQ", LocalDate.of(2017, 6, 1));
+        Set<Flight> flights = provider.flights("LGW", "SVQ",
+                                               DateRange.of(LocalDate.of(2017, 6, 1), LocalDate.of(2017, 6, 8)));
 
         for (Flight flight : flights) {
             System.out.println(flight);

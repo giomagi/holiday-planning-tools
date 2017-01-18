@@ -1,7 +1,10 @@
 package net.giomagi.hpt.providers;
 
-import com.google.common.collect.*;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
 import net.giomagi.hpt.helpers.RawData;
+import net.giomagi.hpt.model.DateRange;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.model.Price;
 
@@ -9,9 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.StringJoiner;
+
+import static com.google.common.collect.Sets.newHashSet;
 
 public class FileBasedFlightProvider {
 
@@ -32,8 +35,17 @@ public class FileBasedFlightProvider {
         }
     }
 
-    public Set<Flight> flights(String departure, String arrival, LocalDate flightDate) {
-        return ImmutableSet.copyOf(flights.get(departure + "-" + arrival + "-" + flightDate.toString()));
+    public Set<Flight> flights(String departure, String arrival, DateRange dates) {
+
+        Set<Flight> res = newHashSet();
+        LocalDate flightDate = dates.lower;
+
+        while (!flightDate.isAfter(dates.upper)) {
+            res.addAll(flights.get(departure + "-" + arrival + "-" + flightDate.toString()));
+            flightDate = flightDate.plusDays(1);
+        }
+
+        return res;
     }
 
     public static FileBasedFlightProvider fromFile(String fileName) {
