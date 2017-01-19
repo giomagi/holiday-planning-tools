@@ -2,7 +2,10 @@ package net.giomagi.hpt;
 
 import net.giomagi.hpt.model.DateRange;
 import net.giomagi.hpt.model.Flight;
+import net.giomagi.hpt.model.Itinerary;
 import net.giomagi.hpt.providers.FileBasedFlightProvider;
+import net.giomagi.hpt.providers.FlightProvider;
+import net.giomagi.hpt.providers.ItineraryCreator;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -11,13 +14,15 @@ public class FlightSearcher {
 
     public static void main(String[] args) {
 
-        FileBasedFlightProvider provider = FileBasedFlightProvider.fromFile("data/flights.csv");
+        ItineraryCreator itineraries = new ItineraryCreator(FlightProvider.fromFile("data/flights.csv"));
 
-        Set<Flight> flights = provider.flights("LGW", "SVQ",
-                                               DateRange.of(LocalDate.of(2017, 6, 1), LocalDate.of(2017, 6, 8)));
+        // TODO: rename departure/arrival > origin/destination
+        for (Itinerary itinerary : itineraries.generate("LGW", "SVQ",
+                                                        DateRange.of(LocalDate.of(2017, 6, 1), LocalDate.of(2017, 6, 8)))) {
 
-        for (Flight flight : flights) {
-            System.out.println(flight);
+            System.out.println(itinerary.outboundFlight);
+            System.out.println(itinerary.returnFlight);
+            System.out.println();
         }
     }
 }

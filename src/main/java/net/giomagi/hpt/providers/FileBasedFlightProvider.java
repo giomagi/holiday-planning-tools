@@ -1,7 +1,6 @@
 package net.giomagi.hpt.providers;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import net.giomagi.hpt.helpers.RawData;
 import net.giomagi.hpt.model.DateRange;
@@ -16,7 +15,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
 
-public class FileBasedFlightProvider {
+public class FileBasedFlightProvider implements FlightProvider {
 
     private Multimap<String, Flight> flights = HashMultimap.create();
 
@@ -35,7 +34,8 @@ public class FileBasedFlightProvider {
         }
     }
 
-    public Set<Flight> flights(String departure, String arrival, DateRange dates) {
+    @Override
+    public Set<Flight> find(String departure, String arrival, DateRange dates) {
 
         Set<Flight> res = newHashSet();
         LocalDate flightDate = dates.lower;
@@ -46,9 +46,5 @@ public class FileBasedFlightProvider {
         }
 
         return res;
-    }
-
-    public static FileBasedFlightProvider fromFile(String fileName) {
-        return new FileBasedFlightProvider(RawData.fromFile(fileName));
     }
 }

@@ -4,12 +4,10 @@ import com.google.common.collect.ImmutableList;
 import net.giomagi.hpt.model.DateRange;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.model.Price;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
@@ -27,9 +25,9 @@ public class FileBasedFlightProviderTest {
                                                                 "LHR,LIN,AZ,2017-06-03,1955,2140,60",
                                                                 "LHR,LIN,AZ,2017-06-04,1955,2140,70");
 
-        FileBasedFlightProvider provider = new FileBasedFlightProvider(flightFromFile);
+        FlightProvider provider = new FileBasedFlightProvider(flightFromFile);
 
-        assertThat(provider.flights("LHR", "LIN", DateRange.of(LocalDate.of(2017, 6, 1), LocalDate.of(2017, 6, 3))),
+        assertThat(provider.find("LHR", "LIN", DateRange.of(LocalDate.of(2017, 6, 1), LocalDate.of(2017, 6, 3))),
                    containsInAnyOrder(new Flight("LHR", "LIN", "AZ",
                                                  LocalDate.of(2017, 6, 1), LocalTime.of(9, 55), LocalTime.of(18, 40),
                                                  Price.of(20, "GBP")),
