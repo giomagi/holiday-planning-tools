@@ -14,3 +14,4 @@ Generator of flight combinations.
 * include only flights in a certain time window (e.g. leaving after 10:30 and landing before 18:30 - local times)
 * get data from ???
 * allow specification of passengers
+* currency handling
