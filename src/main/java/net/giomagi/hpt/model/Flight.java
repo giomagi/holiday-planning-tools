@@ -7,36 +7,36 @@ import java.time.LocalTime;
 
 public class Flight extends ValueType implements CsvFriendly {
 
-    public final String departure;
-    public final String arrival;
+    public final String origin;
+    public final String destination;
     public final String carrier;
     public final LocalDate flightDate;
-    public final LocalTime departureTime;
-    public final LocalTime arrivalTime;
+    public final LocalTime takeOffTime;
+    public final LocalTime landingTime;
     public final Price price;
 
-    public Flight(String departure, String arrival, String carrier,
-                  LocalDate flightDate, LocalTime departureTime, LocalTime arrivalTime,
+    public Flight(String origin, String destination, String carrier,
+                  LocalDate flightDate, LocalTime takeOffTime, LocalTime landingTime,
                   Price price) {
 
-        this.departure = departure;
-        this.arrival = arrival;
+        this.origin = origin;
+        this.destination = destination;
         this.carrier = carrier;
         this.flightDate = flightDate;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
+        this.takeOffTime = takeOffTime;
+        this.landingTime = landingTime;
         this.price = price;
     }
 
     @Override
     public String asCsv() {
         return Joiner.on(',').join(new String[] {
-                departure,
-                arrival,
+                origin,
+                destination,
                 carrier,
                 flightDate.toString(),
-                departureTime.toString(),
-                arrivalTime.toString(),
+                takeOffTime.toString(),
+                landingTime.toString(),
                 price.asCsv()
         });
     }

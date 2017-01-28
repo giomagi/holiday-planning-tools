@@ -34,13 +34,13 @@ public class FileBasedFlightProvider implements FlightProvider {
     }
 
     @Override
-    public Set<Flight> find(String departure, String arrival, Range<LocalDate> dates) {
+    public Set<Flight> find(String origin, String destination, Range<LocalDate> dates) {
 
         Set<Flight> res = newHashSet();
         LocalDate flightDate = dates.lower;
 
         while (!flightDate.isAfter(dates.upper)) {
-            res.addAll(flights.get(departure + "-" + arrival + "-" + flightDate.toString()));
+            res.addAll(flights.get(origin + "-" + destination + "-" + flightDate.toString()));
             flightDate = flightDate.plusDays(1);
         }
 

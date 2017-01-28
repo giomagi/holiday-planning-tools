@@ -20,10 +20,10 @@ public class Itinerary extends ValueType implements CsvFriendly {
 
     public String summary() {
         return String.format("%s>%s - %s>%s : %s : %s (%s)",
-                             outboundFlight.departure,
-                             outboundFlight.arrival,
-                             returnFlight.departure,
-                             returnFlight.arrival,
+                             outboundFlight.origin,
+                             outboundFlight.destination,
+                             returnFlight.origin,
+                             returnFlight.destination,
                              totalPrice(),
                              totalDays(),
                              workDays());

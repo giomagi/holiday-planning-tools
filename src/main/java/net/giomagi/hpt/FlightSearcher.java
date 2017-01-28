@@ -14,7 +14,6 @@ public class FlightSearcher {
 
         ItineraryCreator itineraries = new ItineraryCreator(FlightProvider.fromFile("data/flights.csv"));
 
-        // TODO: rename departure/arrival > origin/destination
         for (Itinerary itinerary : itineraries.generate(ImmutableSet.of("LHR", "LGW", "STN", "LTN"),
                                                         ImmutableSet.of("AGP", "SVQ", "XRY", "LEI"),
                                                         Range.of(LocalDate.of(2017, 1, 1),

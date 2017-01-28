@@ -18,18 +18,18 @@ public class ItineraryCreator {
         flights = flightProvider;
     }
 
-    public Set<Itinerary> generate(Set<String> departures, Set<String> arrivals,
+    public Set<Itinerary> generate(Set<String> origins, Set<String> destinations,
                                    Range<LocalDate> dates, Range<Integer> minMaxWorkDays) {
 
         Set<Itinerary> res = newHashSet();
         Set<Flight> outboundOptions = newHashSet();
         Set<Flight> returnOptions = newHashSet();
 
-        for (String departure : departures) {
-            for (String arrival : arrivals) {
+        for (String origin : origins) {
+            for (String destination : destinations) {
 
-                outboundOptions.addAll(flights.find(departure, arrival, dates));
-                returnOptions.addAll(flights.find(arrival, departure, dates));
+                outboundOptions.addAll(flights.find(origin, destination, dates));
+                returnOptions.addAll(flights.find(destination, origin, dates));
             }
         }
 

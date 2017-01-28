@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public interface FlightProvider {
-    Set<Flight> find(String departure, String arrival, Range<LocalDate> dates);
+    Set<Flight> find(String origin, String destination, Range<LocalDate> dates);
 
     static FlightProvider fromFile(String fileName) {
         return new FileBasedFlightProvider(RawData.fromFile(fileName));
