@@ -35,8 +35,8 @@ public class ItineraryCreator {
 
         for (Flight outboundOption : outboundOptions) {
 
-            LocalDate earliestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.lower);
-            LocalDate latestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.upper);
+            LocalDate earliestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.lower - 1);
+            LocalDate latestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.upper - 1);
 
             for (Flight returnOption : returnOptions) {
                 if (!returnOption.flightDate.isBefore(earliestReturn)

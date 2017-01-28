@@ -19,6 +19,11 @@ public class UkCalendar {
     }
 
     public static int workDaysBetween(LocalDate d1, LocalDate d2) {
+
+        if (d2.isBefore(d1)) {
+            throw new IllegalArgumentException("The first date must be not after the second [ " + d1 + " - " + d2 + " ]");
+        }
+
         int c = 0;
 
         for (LocalDate curr = d1; !curr.isAfter(d2); curr = curr.plusDays(1)) {

@@ -19,7 +19,7 @@ public class FlightSearcher {
                                                         ImmutableSet.of("AGP", "SVQ", "XRY", "LEI"),
                                                         Range.of(LocalDate.of(2017, 1, 1),
                                                                  LocalDate.of(2017, 12, 31)),
-                                                        Range.of(11, 11))) { // TODO: bug does [x, y+1]
+                                                        Range.of(11, 11))) {
 
             System.out.println(itinerary.asCsv());
         }
