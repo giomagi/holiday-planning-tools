@@ -8,7 +8,7 @@ import java.time.Month;
 
 import static java.time.DayOfWeek.*;
 
-public class UkCalendar {
+public class EnglandCalendar2017to2020 {
 
     private static final ImmutableSet<LocalDate> FUTURE_GOOD_FRIDAYS = ImmutableSet.of(LocalDate.of(2017, 4, 14),
                                                                                        LocalDate.of(2018, 3, 30),
@@ -51,7 +51,6 @@ public class UkCalendar {
         return c;
     }
 
-    // TODO: rename to EnglandCalendarYearXtoY + make it non-static
     public static boolean isABankHoliday(LocalDate date) {
         return isNewYearsDay(date)
                 || isGoodFriday(date)

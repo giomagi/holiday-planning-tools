@@ -1,6 +1,6 @@
 package net.giomagi.hpt.providers;
 
-import net.giomagi.hpt.helpers.UkCalendar;
+import net.giomagi.hpt.helpers.EnglandCalendar2017to2020;
 import net.giomagi.hpt.model.Range;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.model.Itinerary;
@@ -35,8 +35,8 @@ public class ItineraryCreator {
 
         for (Flight outboundOption : outboundOptions) {
 
-            LocalDate earliestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.lower - 1);
-            LocalDate latestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.upper - 1);
+            LocalDate earliestReturn = EnglandCalendar2017to2020.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.lower - 1);
+            LocalDate latestReturn = EnglandCalendar2017to2020.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.upper - 1);
 
             for (Flight returnOption : returnOptions) {
                 if (!returnOption.flightDate.isBefore(earliestReturn)

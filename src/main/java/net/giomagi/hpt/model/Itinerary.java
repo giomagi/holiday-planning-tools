@@ -1,7 +1,7 @@
 package net.giomagi.hpt.model;
 
 import com.google.common.base.Joiner;
-import net.giomagi.hpt.helpers.UkCalendar;
+import net.giomagi.hpt.helpers.EnglandCalendar2017to2020;
 
 import java.time.temporal.ChronoUnit;
 
@@ -49,6 +49,6 @@ public class Itinerary extends ValueType implements CsvFriendly {
     }
 
     public String workDays() {
-        return Integer.toString(UkCalendar.workDaysBetween(outboundFlight.flightDate, returnFlight.flightDate));
+        return Integer.toString(EnglandCalendar2017to2020.workDaysBetween(outboundFlight.flightDate, returnFlight.flightDate));
     }
 }

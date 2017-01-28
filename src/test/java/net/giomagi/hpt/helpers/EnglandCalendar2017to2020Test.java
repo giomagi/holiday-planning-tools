@@ -4,13 +4,13 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-import static net.giomagi.hpt.helpers.UkCalendar.addWorkingDays;
-import static net.giomagi.hpt.helpers.UkCalendar.isABankHoliday;
-import static net.giomagi.hpt.helpers.UkCalendar.workDaysBetween;
+import static net.giomagi.hpt.helpers.EnglandCalendar2017to2020.addWorkingDays;
+import static net.giomagi.hpt.helpers.EnglandCalendar2017to2020.isABankHoliday;
+import static net.giomagi.hpt.helpers.EnglandCalendar2017to2020.workDaysBetween;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 
-public class UkCalendarTest {
+public class EnglandCalendar2017to2020Test {
 
     @Test
     public void addsTheRequiredNumberOfWorkingDays() {
