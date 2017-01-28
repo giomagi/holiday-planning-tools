@@ -1,10 +1,11 @@
 package net.giomagi.hpt.model;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+import com.google.common.base.Joiner;
+import net.giomagi.hpt.helpers.UkCalendar;
+
 import java.time.temporal.ChronoUnit;
 
-public class Itinerary extends ValueType {
+public class Itinerary extends ValueType implements CsvFriendly {
     public final Flight outboundFlight;
     public final Flight returnFlight;
 
@@ -18,33 +19,36 @@ public class Itinerary extends ValueType {
     }
 
     public String summary() {
-        return String.format("%s>%s - %s>%s : %dGBP : %s (%d)",
+        return String.format("%s>%s - %s>%s : %s : %s (%s)",
                              outboundFlight.departure,
                              outboundFlight.arrival,
                              returnFlight.departure,
                              returnFlight.arrival,
-                             outboundFlight.price.value + returnFlight.price.value,
-                             outboundFlight.flightDate.until(returnFlight.flightDate, ChronoUnit.DAYS) + 1,
-                             workDaysBetween(outboundFlight.flightDate, returnFlight.flightDate));
+                             totalPrice(),
+                             totalDays(),
+                             workDays());
     }
 
-    // TODO: move it into proper calendar
-    private int workDaysBetween(LocalDate d1, LocalDate d2) {
-        int c = 0;
-
-        for (LocalDate curr = d1; !curr.isAfter(d2); curr = curr.plusDays(1)) {
-            if (curr.getDayOfWeek() != DayOfWeek.SATURDAY
-                    && curr.getDayOfWeek() != DayOfWeek.SUNDAY
-                    && !isABankHoliday(curr)) {
-
-                c++;
-            }
-        }
-
-        return c;
+    @Override
+    public String asCsv() {
+        return Joiner.on(',').join(new String[] {
+                outboundFlight.asCsv(),
+                returnFlight.asCsv(),
+                totalPrice(),
+                totalDays(),
+                workDays()
+        });
     }
 
-    private boolean isABankHoliday(LocalDate date) {
-        return false;
+    private String totalPrice() {
+        return (outboundFlight.price.value + returnFlight.price.value) + "GBP";
+    }
+
+    private String totalDays() {
+        return Long.toString(outboundFlight.flightDate.until(returnFlight.flightDate, ChronoUnit.DAYS) + 1);
+    }
+
+    public String workDays() {
+        return Integer.toString(UkCalendar.workDaysBetween(outboundFlight.flightDate, returnFlight.flightDate));
     }
 }

@@ -2,7 +2,7 @@ package net.giomagi.hpt.providers;
 
 import com.google.common.collect.ImmutableSet;
 import net.giomagi.hpt.support.FlightMaker;
-import net.giomagi.hpt.model.DateRange;
+import net.giomagi.hpt.model.Range;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.model.Itinerary;
 import org.junit.Test;
@@ -12,6 +12,8 @@ import java.util.Collections;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static java.util.Collections.singleton;
+import static net.giomagi.hpt.support.FlightMaker.date;
+import static net.giomagi.hpt.support.FlightMaker.flight;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -25,16 +27,16 @@ public class ItineraryCreatorTest {
     @Test
     public void returnsAllCombinationOfFlightsBetweenTwoDestinations() {
 
-        Flight flight1 = make(a(FlightMaker.flight));
-        Flight flight2 = make(a(FlightMaker.flight));
-        Flight flight3 = make(a(FlightMaker.flight));
+        Flight flight1 = make(a(flight));
+        Flight flight2 = make(a(flight));
+        Flight flight3 = make(a(flight));
 
-        DateRange dates = DateRange.of(LocalDate.now(), LocalDate.now().plusWeeks(1));
+        Range<LocalDate> dates = Range.of(LocalDate.now(), LocalDate.now().plusWeeks(1));
 
         when(flights.find("A", "B", dates)).thenReturn(ImmutableSet.of(flight1, flight2));
         when(flights.find("B", "A", dates)).thenReturn(ImmutableSet.of(flight3));
 
-        assertThat(itineraries.generate(singleton("A"), singleton("B"), dates),
+        assertThat(itineraries.generate(singleton("A"), singleton("B"), dates, Range.of(0, 0)),
                    containsInAnyOrder(Itinerary.of(flight1, flight3),
                                       Itinerary.of(flight2, flight3)));
     }
@@ -42,16 +44,16 @@ public class ItineraryCreatorTest {
     @Test
     public void returnsCombinationsFromMultipleOriginsAndDestinations() {
 
-        Flight flightAC = make(a(FlightMaker.flight));
-        Flight flightAD = make(a(FlightMaker.flight));
-        Flight flightBC = make(a(FlightMaker.flight));
-        Flight flightBD = make(a(FlightMaker.flight));
-        Flight flightCA = make(a(FlightMaker.flight));
-        Flight flightCB = make(a(FlightMaker.flight));
-        Flight flightDA = make(a(FlightMaker.flight));
-        Flight flightDB = make(a(FlightMaker.flight));
+        Flight flightAC = make(a(flight));
+        Flight flightAD = make(a(flight));
+        Flight flightBC = make(a(flight));
+        Flight flightBD = make(a(flight));
+        Flight flightCA = make(a(flight));
+        Flight flightCB = make(a(flight));
+        Flight flightDA = make(a(flight));
+        Flight flightDB = make(a(flight));
 
-        DateRange dates = DateRange.of(LocalDate.now(), LocalDate.now());
+        Range<LocalDate> dates = Range.of(LocalDate.now(), LocalDate.now());
 
         when(flights.find("A", "C", dates)).thenReturn(singleton(flightAC));
         when(flights.find("A", "D", dates)).thenReturn(singleton(flightAD));
@@ -62,7 +64,7 @@ public class ItineraryCreatorTest {
         when(flights.find("D", "A", dates)).thenReturn(singleton(flightDA));
         when(flights.find("D", "B", dates)).thenReturn(singleton(flightDB));
 
-        assertThat(itineraries.generate(ImmutableSet.of("A", "B"), ImmutableSet.of("C", "D"), dates),
+        assertThat(itineraries.generate(ImmutableSet.of("A", "B"), ImmutableSet.of("C", "D"), dates, Range.of(0, 0)),
                    containsInAnyOrder(Itinerary.of(flightAC, flightCA),
                                       Itinerary.of(flightAC, flightCB),
                                       Itinerary.of(flightAC, flightDA),
@@ -82,29 +84,51 @@ public class ItineraryCreatorTest {
     }
 
     @Test
+    public void returnsOnlyCombinationsThatCoverTheRequiredNumberOfWorkingDays() {
+
+        Range<Integer> minMaxWorkDays = Range.of(2, 4);
+        Range<LocalDate> dates = Range.of(LocalDate.of(2017, 1, 21), LocalDate.of(2017, 1, 28));
+
+        Flight outbound = make(a(flight, with(date, LocalDate.of(2017, 1, 21))));
+        Flight earlyReturn = make(a(flight, with(date, LocalDate.of(2017, 1, 23))));
+        Flight okReturn1 = make(a(flight, with(date, LocalDate.of(2017, 1, 24))));
+        Flight okReturn2 = make(a(flight, with(date, LocalDate.of(2017, 1, 26))));
+        Flight lateReturn = make(a(flight, with(date, LocalDate.of(2017, 1, 27))));
+
+        when(flights.find("A", "B", dates)).thenReturn(ImmutableSet.of(outbound));
+        when(flights.find("B", "A", dates))
+                .thenReturn(ImmutableSet.of(earlyReturn, okReturn1, okReturn2, lateReturn));
+
+        assertThat(itineraries.generate(singleton("A"), singleton("B"), dates, minMaxWorkDays),
+                   containsInAnyOrder(Itinerary.of(outbound, okReturn1),
+                                      Itinerary.of(outbound, okReturn2)));
+    }
+
+    @Test
     public void returnsACombinationOnlyIfItHasBothFlights() {
 
-        DateRange dates = DateRange.of(LocalDate.now(), LocalDate.now().plusWeeks(1));
+        // TODO: ranges as class attributes?
+        Range<LocalDate> dates = Range.of(LocalDate.now(), LocalDate.now().plusWeeks(1));
 
-        when(flights.find("A", "B", dates)).thenReturn(ImmutableSet.of(make(a(FlightMaker.flight))));
+        when(flights.find("A", "B", dates)).thenReturn(ImmutableSet.of(make(a(flight))));
         when(flights.find("B", "A", dates)).thenReturn(Collections.emptySet());
 
-        assertThat(itineraries.generate(singleton("A"), singleton("B"), dates), is(empty()));
+        assertThat(itineraries.generate(singleton("A"), singleton("B"), dates, Range.of(0, 0)), is(empty()));
     }
 
     @Test
     public void doesNotReturnACombinationIfTheReturnDateIsBeforeTheOutboundDate() {
 
-        DateRange dates = DateRange.of(LocalDate.now(), LocalDate.now().plusWeeks(1));
+        Range<LocalDate> dates = Range.of(LocalDate.now(), LocalDate.now().plusWeeks(1));
 
         when(flights.find("A", "B", dates))
-                .thenReturn(ImmutableSet.of(make(a(FlightMaker.flight, with(FlightMaker.date, LocalDate.now())))));
+                .thenReturn(ImmutableSet.of(make(a(flight, with(FlightMaker.date, LocalDate.now())))));
 
         when(flights.find("B", "A", dates))
-                .thenReturn(ImmutableSet.of(make(a(FlightMaker.flight, with(FlightMaker.date, LocalDate.now().plusDays(1))))));
+                .thenReturn(ImmutableSet.of(make(a(flight, with(FlightMaker.date, LocalDate.now().plusDays(1))))));
 
-        assertThat(itineraries.generate(singleton("A"), singleton("B"), dates), is(not(empty())));
-        assertThat(itineraries.generate(singleton("B"), singleton("A"), dates), is(empty()));
+        assertThat(itineraries.generate(singleton("A"), singleton("B"), dates, Range.of(0, 1)), is(not(empty())));
+        assertThat(itineraries.generate(singleton("B"), singleton("A"), dates, Range.of(0, 1)), is(empty()));
     }
 
 }

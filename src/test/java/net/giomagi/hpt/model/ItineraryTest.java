@@ -6,6 +6,7 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.make;
@@ -29,6 +30,18 @@ public class ItineraryTest {
                                        with(destination, "LHR"),
                                        with(date, LocalDate.of(2017, 6, 1)),
                                        with(price, 55)))).summary(),
-                   equalTo("STN>AOI - LIN>LHR : 80GBP : 11 (9)"));
+                   equalTo("STN>AOI - LIN>LHR : 80GBP : 11 (8)"));
+    }
+
+    @Test
+    public void printsAllDetailsAsCsv() {
+
+        assertThat(Itinerary.of(new Flight("STN", "AOI", "FR",
+                                           LocalDate.of(2017, 1, 21), LocalTime.of(12, 25), LocalTime.of(13, 35),
+                                           Price.of(22, "GBP")),
+                                new Flight("LIN", "LHR", "AZ",
+                                           LocalDate.of(2017, 1, 24), LocalTime.of(14, 25), LocalTime.of(17, 20),
+                                           Price.of(67, "GBP"))).asCsv(),
+                   equalTo("STN,AOI,FR,2017-01-21,12:25,13:35,22GBP,LIN,LHR,AZ,2017-01-24,14:25,17:20,67GBP,89GBP,4,2"));
     }
 }

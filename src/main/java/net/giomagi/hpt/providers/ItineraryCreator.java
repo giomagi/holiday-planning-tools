@@ -1,9 +1,11 @@
 package net.giomagi.hpt.providers;
 
-import net.giomagi.hpt.model.DateRange;
+import net.giomagi.hpt.helpers.UkCalendar;
+import net.giomagi.hpt.model.Range;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.model.Itinerary;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
@@ -16,7 +18,8 @@ public class ItineraryCreator {
         flights = flightProvider;
     }
 
-    public Set<Itinerary> generate(Set<String> departures, Set<String> arrivals, DateRange dates) {
+    public Set<Itinerary> generate(Set<String> departures, Set<String> arrivals,
+                                   Range<LocalDate> dates, Range<Integer> minMaxWorkDays) {
 
         Set<Itinerary> res = newHashSet();
         Set<Flight> outboundOptions = newHashSet();
@@ -31,8 +34,14 @@ public class ItineraryCreator {
         }
 
         for (Flight outboundOption : outboundOptions) {
+
+            LocalDate earliestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.lower);
+            LocalDate latestReturn = UkCalendar.addWorkingDays(outboundOption.flightDate, minMaxWorkDays.upper);
+
             for (Flight returnOption : returnOptions) {
-                if (!outboundOption.flightDate.isAfter(returnOption.flightDate)) {
+                if (!returnOption.flightDate.isBefore(earliestReturn)
+                        && !returnOption.flightDate.isAfter(latestReturn)) {
+
                     res.add(Itinerary.of(outboundOption, returnOption));
                 }
             }

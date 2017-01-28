@@ -1,7 +1,7 @@
 package net.giomagi.hpt.providers;
 
 import com.google.common.collect.ImmutableList;
-import net.giomagi.hpt.model.DateRange;
+import net.giomagi.hpt.model.Range;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.model.Price;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class FileBasedFlightProviderTest {
 
         FlightProvider provider = new FileBasedFlightProvider(flightFromFile);
 
-        assertThat(provider.find("LHR", "LIN", DateRange.of(LocalDate.of(2017, 6, 1), LocalDate.of(2017, 6, 3))),
+        assertThat(provider.find("LHR", "LIN", Range.of(LocalDate.of(2017, 6, 1), LocalDate.of(2017, 6, 3))),
                    containsInAnyOrder(new Flight("LHR", "LIN", "AZ",
                                                  LocalDate.of(2017, 6, 1), LocalTime.of(9, 55), LocalTime.of(18, 40),
                                                  Price.of(20, "GBP")),

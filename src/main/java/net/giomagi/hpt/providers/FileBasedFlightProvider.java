@@ -2,8 +2,7 @@ package net.giomagi.hpt.providers;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.giomagi.hpt.helpers.RawData;
-import net.giomagi.hpt.model.DateRange;
+import net.giomagi.hpt.model.Range;
 import net.giomagi.hpt.model.Flight;
 import net.giomagi.hpt.model.Price;
 
@@ -35,7 +34,7 @@ public class FileBasedFlightProvider implements FlightProvider {
     }
 
     @Override
-    public Set<Flight> find(String departure, String arrival, DateRange dates) {
+    public Set<Flight> find(String departure, String arrival, Range<LocalDate> dates) {
 
         Set<Flight> res = newHashSet();
         LocalDate flightDate = dates.lower;

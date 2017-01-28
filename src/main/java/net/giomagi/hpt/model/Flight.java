@@ -1,9 +1,11 @@
 package net.giomagi.hpt.model;
 
+import com.google.common.base.Joiner;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Flight extends ValueType {
+public class Flight extends ValueType implements CsvFriendly {
 
     public final String departure;
     public final String arrival;
@@ -24,5 +26,18 @@ public class Flight extends ValueType {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.price = price;
+    }
+
+    @Override
+    public String asCsv() {
+        return Joiner.on(',').join(new String[] {
+                departure,
+                arrival,
+                carrier,
+                flightDate.toString(),
+                departureTime.toString(),
+                arrivalTime.toString(),
+                price.asCsv()
+        });
     }
 }
