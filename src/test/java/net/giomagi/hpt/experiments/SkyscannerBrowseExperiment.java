@@ -10,7 +10,7 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class SkyscannerExperiment {
+public class SkyscannerBrowseExperiment {
 
     public static void main(String[] args) throws IOException {
 
