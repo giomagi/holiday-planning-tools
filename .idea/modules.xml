@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/holiday-planning-tools.iml" filepath="$PROJECT_DIR$/.idea/modules/holiday-planning-tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/holiday-planning-tools_main.iml" filepath="$PROJECT_DIR$/.idea/modules/holiday-planning-tools_main.iml" group="holiday-planning-tools" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/holiday-planning-tools_test.iml" filepath="$PROJECT_DIR$/.idea/modules/holiday-planning-tools_test.iml" group="holiday-planning-tools" />
     </modules>
   </component>
 </project>
