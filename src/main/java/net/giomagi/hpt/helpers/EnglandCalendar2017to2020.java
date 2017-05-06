@@ -8,6 +8,7 @@ import java.time.Month;
 
 import static java.time.DayOfWeek.*;
 
+// TODO: non-static
 public class EnglandCalendar2017to2020 {
 
     private static final ImmutableSet<LocalDate> FUTURE_GOOD_FRIDAYS = ImmutableSet.of(LocalDate.of(2017, 4, 14),
